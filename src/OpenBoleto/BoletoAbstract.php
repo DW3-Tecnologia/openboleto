@@ -137,6 +137,12 @@ abstract class BoletoAbstract
     protected $dataVencimento;
 
     /**
+     * Data de vencimento exibida
+     * @var \DateTime
+     */
+    protected $vencimentoExibido;
+
+    /**
      * Define se o boleto é para contra-apresentação
      * @var bool
      */
@@ -153,6 +159,18 @@ abstract class BoletoAbstract
      * @var string
      */
     protected $especieDoc;
+
+    /**
+     * QR CODE CODIGO  
+     * @var string
+     */
+    protected $codQrCode;
+
+    /**
+     * URL do QR Code
+     * @var string
+     */
+    protected $codUrlQrCode;
 
     /**
      * Número do documento
@@ -261,7 +279,7 @@ abstract class BoletoAbstract
      * Nome do arquivo de template a ser usado
      * @var string
      */
-    protected $layout = 'default.phtml';
+    protected $layout = 'default-pix.phtml';
 
     /**
      * Pasta de localização de resources (imagens, css e views)
@@ -292,8 +310,20 @@ abstract class BoletoAbstract
      * @var array
      */
     protected $imprimeInstrucoesImpressao = true;
+
+    /**
+     * Conteúdo que será utilizado para geração de possíveis conteúdos localizados no topo do boleto
+     * @var string
+     */
+    protected $contentTop = null;
+
+    protected $reemissao = false;
+    protected $showPix = false;
     
-    
+    protected $logoEmpresa;
+    protected $nomeBanco;
+    protected $logoPix;
+
     /**
      * Construtor
      *
@@ -509,6 +539,35 @@ abstract class BoletoAbstract
         return $this->dataVencimento;
     }
 
+    public function setVencimentoExibido(DateTime $vencimentoExibido) {
+        $this->vencimentoExibido = $vencimentoExibido;
+        return $this;
+    }
+
+    public function getVencimentoExibido() {
+        if($this->vencimentoExibido == '') {
+            return $this->dataVencimento;
+        }
+        return $this->vencimentoExibido;
+    }
+
+    /**
+     * Definição do conteúdo que será utilizado para geração de possíveis conteúdos localizados no topo do boleto
+     *
+     */
+    public function setContentTop(string $contentTop = null){
+
+        if(isset($contentTop) AND (is_string($contentTop) AND trim($contentTop) !== '')) $this->contentTop = $contentTop;
+        return $this;
+
+    }
+
+    public function getContentTop(){
+
+        return $this->contentTop;
+
+    }
+
     /**
      * Define se o boleto é Contra-apresentação, ou seja, a data de vencimento e o valor são deixados em branco
      * É sugerido que se use o campo pagamento mínimo ($this->setPagamentoMinimo())
@@ -599,6 +658,50 @@ abstract class BoletoAbstract
     }
 
     /**
+     * Define o campo QR CODE CODIGO
+     *
+     * @param string $codQrCode
+     * @return BoletoAbstract
+     */
+    public function setCodQrCode($codQrCode)
+    {
+        $this->codQrCode = $codQrCode;
+        return $this;
+    }
+
+    /**
+     * Retorna o campo QR CODE CODIGO
+     *
+     * @return string
+     */
+    public function getCodQrCode()
+    {
+        return $this->codQrCode;
+    }
+
+        /**
+     * Define o campo QR CODE URL
+     *
+     * @param string $codUrlQrCode
+     * @return BoletoAbstract
+     */
+    public function setCodUrlQrCode($codUrlQrCode)
+    {
+        $this->codUrlQrCode = $codUrlQrCode;
+        return $this;
+    }
+
+    /**
+     * Retorna o campo Espécie Doc, geralmente DM (Duplicata Mercantil)
+     *
+     * @return string
+     */
+    public function getCodUrlQrCode()
+    {
+        return $this->codUrlQrCode;
+    }
+
+    /**
      * Define o campo Número do documento
      *
      * @param int $numeroDocumento
@@ -622,6 +725,7 @@ abstract class BoletoAbstract
         $this->numParcelas = $numParcelas;
         return $this;
     }
+
 
     /**
      * Retorna o campo Número do documento
@@ -1136,6 +1240,94 @@ abstract class BoletoAbstract
     }
 
     /**
+     * Define a localização do logotipo do banco relativo à pasta de imagens
+     *
+     * @param string $logoBanco
+     * @return BoletoAbstract
+     */
+    public function setLogoEmpresa($logoEmpresa)
+    {
+        $this->logoEmpresa = $logoEmpresa;
+        return $this;
+    }
+
+    /**
+     * Retorna a localização do logotipo do banco relativo à pasta de imagens
+     *
+     * @return string
+     */
+    public function getLogoEmpresa()
+    {
+        return $this->logoEmpresa;
+    }
+
+    /**
+     * Retorna o logotipo do banco em Base64, pronto para ser inserido na página
+     *
+     * @return string
+     */
+    public function getLogoEmpresaBase64()
+    {
+        static $logoData;
+
+        $logoData or $logoData = 'data:image/' . pathinfo($this->getLogoEmpresa(), PATHINFO_EXTENSION) .
+            ';base64,' . base64_encode(file_get_contents($this->getResourcePath() .
+            '/images/' . $this->getLogoEmpresa()));
+
+        return $logoData;
+    }
+
+    /* 
+    Add imagem do pix
+    */
+
+    /**
+     * Define a localização do logotipo do banco relativo à pasta de imagens
+     *
+     * @param string $logoBanco
+     * @return BoletoAbstract
+     */
+    public function setLogoPix($logoPix)
+    {
+        $this->logoPix = $logoPix;
+        return $this;
+    }
+
+    /**
+     * Retorna a localização do logotipo do banco relativo à pasta de imagens
+     *
+     * @return string
+     */
+    public function getLogoPix()
+    {
+        return $this->logoPix;
+    }
+
+    /**
+     * Retorna o logotipo do banco em Base64, pronto para ser inserido na página
+     *
+     * @return string
+     */
+    public function getLogoPixBase64()
+    {
+        static $logoData;
+
+        $logoData or $logoData = 'data:image/' . pathinfo($this->getLogoPix(), PATHINFO_EXTENSION) .
+            ';base64,' . base64_encode(file_get_contents($this->getResourcePath() .
+            '/images/' . $this->getLogoPix()));
+
+        return $logoData;
+    }
+
+    public function setNomeBanco($nomeBanco) {
+        $this->nomeBanco = $nomeBanco;
+    }
+
+    public function getNomeBanco() {
+        return $this->nomeBanco;
+    }
+
+    /**
      * Define a localização exata do logotipo da empresa.
      * Note que este não é relativo à pasta de imagens
      *
@@ -1245,11 +1437,15 @@ abstract class BoletoAbstract
             'cedente_endereco1' => $this->getCedente()->getEndereco(),
             'cedente_endereco2' => $this->getCedente()->getCepCidadeUf(),
             'logo_banco' => $this->getLogoBancoBase64(),
+            'nome_banco' => $this->getNomeBanco(),
+            'logo_empresa' => $this->getLogoEmpresaBase64(),
+            'logo_pix' => $this->getLogoPixBase64(),
             'logotipo' => $this->getLogoPath(),
             'codigo_banco_com_dv' => $this->getCodigoBancoComDv(),
             'especie' => static::$especie[$this->getMoeda()],
             'quantidade' => $this->getQuantidade(),
             'data_vencimento' => $this->getContraApresentacao() ? 'Contra Apresenta&ccedil;&atilde;o' : $this->getDataVencimento()->format('d/m/Y'),
+            'vencimento_exibido' => $this->getVencimentoExibido()->format('d/m/Y'),
             'data_processamento'  => $this->getDataProcessamento()->format('d/m/Y'),
             'data_documento' => $this->getDataDocumento()->format('d/m/Y'),
             'pagamento_minimo' => static::formataDinheiro($this->getPagamentoMinimo()),
@@ -1263,6 +1459,8 @@ abstract class BoletoAbstract
             'sacador_avalista' => $this->getSacadorAvalista() ? $this->getSacadorAvalista()->getNomeDocumento() : null,
             'sacador_avalista_endereco1' => $this->getSacadorAvalista() ? $this->getSacadorAvalista()->getEndereco() : null,
             'sacador_avalista_endereco2' => $this->getSacadorAvalista() ? $this->getSacadorAvalista()->getCepCidadeUf() : null,
+            'nome_sacador' => $this->getSacadorAvalista()->getNome(),
+            'documento_sacador' => $this->getSacadorAvalista()->getDocumento(),
             'sacado' => $this->getSacado()->getNome(),
             'sacado_documento' => $this->getSacado()->getDocumento(),
             'sacado_endereco1' => $this->getSacado()->getEndereco(),
@@ -1274,13 +1472,18 @@ abstract class BoletoAbstract
             'agencia_codigo_cedente'=> $this->getAgenciaCodigoCedente(),
             'nosso_numero' => $this->getNossoNumero(),
             'especie_doc' => $this->getEspecieDoc(),
+            'cod_qrcode' => $this->getCodQrCode(),
+            'cod_url_qrcode' => $this->getCodUrlQrCode(),
             'aceite' => $this->getAceite(),
             'carteira' => $this->getCarteiraNome(),
             'uso_banco' => $this->getUsoBanco(),
             'codigo_barras' => $this->getImagemCodigoDeBarras(),
             'resource_path' => $this->getResourcePath(),
             'numero_febraban' => $this->getNumeroFebraban(),
-            'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao()
+            'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao(),
+            'reemissao' => $this->getReemissao(),
+            'showPix' => $this->getShowPix(),
+            'contentTop' => $this->getContentTop()
         );
         
         
@@ -1332,6 +1535,25 @@ abstract class BoletoAbstract
     public function getNumeroFebraban()
     {
         return self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getDigitoVerificador() . $this->getFatorVencimento() . $this->getValorZeroFill() . $this->getCampoLivre();
+    }
+
+    public function setReemissao($reemissao) {
+        $this->reemissao = $reemissao;
+    }
+
+    /**
+     * Retorna se a emissão é uma reemissão
+     */
+    public function getReemissao() {
+        return $this->reemissao;
+    }
+
+    public function setShowPix($show_pix) {
+        $this->showPix = $show_pix;
+    }
+
+    public function getShowPix() {
+        return $this->showPix;
     }
 
     /**
@@ -1466,6 +1688,63 @@ abstract class BoletoAbstract
         return $retorno . '<div class="black large"></div>' .
         '<div class="white thin"></div>' .
         '<div class="black thin"></div>' .
+        '</div>';
+    }
+
+    public function getImagemCodigoDeBarrasG() {
+
+        $codigo = $this->getNumeroFebraban();
+
+        $barcodes = array('00110', '10001', '01001', '11000', '00101', '10100', '01100', '00011', '10010', '01010');
+
+        for ($f1 = 9; $f1 >= 0; $f1--) {
+            for ($f2 = 9; $f2 >= 0; $f2--) {
+
+                $f = ($f1 * 10) + $f2;
+                $texto = '';
+
+                for ($i = 1; $i < 6; $i++) {
+                    $texto .= substr($barcodes[$f1], ($i - 1), 1) . substr($barcodes[$f2], ($i - 1), 1);
+                }
+
+                $barcodes[$f] = $texto;
+                
+            }
+        }
+
+        // Guarda inicial
+        $retorno = '<div class="barcode" style="background:#eee;height:50px;overflow:hidden">' .
+        '<img src="/images/p.png" width="1" height="50">' .
+        '<img src="/images/b.png" width="1" height="50">' .
+        '<img src="/images/p.png" width="1" height="50">' .
+        '<img src="/images/b.png" width="1" height="50">';
+
+        if (strlen($codigo) % 2 != 0) {
+            $codigo = "0" . $codigo;
+        }
+
+        // Draw dos dados
+        while (strlen($codigo) > 0) {
+
+            $i = (int) round(self::caracteresEsquerda($codigo, 2));
+            $codigo = self::caracteresDireita($codigo, strlen($codigo) - 2);
+            $f = $barcodes[$i];
+
+            for ($i = 1; $i < 11; $i += 2) {
+
+                $f1 = (substr($f, ($i - 1), 1) == "0") ? '1' : '3';
+                $retorno .= '<img src="/images/b.png" width="'.$f1.'" height="50">';
+
+                $f2 = (substr($f, $i, 1) == '0') ? '1' : '3';
+                $retorno .= '<img src=/images/b.png" width="'.$f2.'" height="50">';
+
+            }
+        }
+
+        // Final
+        return $retorno . '<img src="/images/b.png") width="3" height="50">' .
+        '<img src="/images/b.png" width="1" height="50">' .
+        '<img src="/images/b.png" width="1" height="50">' .
         '</div>';
     }
     

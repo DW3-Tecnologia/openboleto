@@ -90,14 +90,14 @@
         </td>
     </tr>
     <tr>
-        <?php if (isset($esconde_uso_banco) && !$esconde_uso_banco) : ?>
+        <?php if (!$esconde_uso_banco) : ?>
             <td<?php if (!$mostra_cip) : ?> colspan="2"<?php endif ?>>
                 <div class="titulo">Uso do banco</div>
                 <div class="conteudo"><?php echo $uso_banco ?></div>
             </td>
         <?php endif; ?>
 
-        <?php if (isset($mostra_cip) && $mostra_cip) : ?>
+        <?php if ($mostra_cip) : ?>
             <!-- Campo exclusivo do Bradesco -->
             <td width="20">
                 <div class="titulo">CIP</div>
@@ -105,7 +105,7 @@
             </td>
         <?php endif ?>
 
-        <td<?php if (isset($esconde_uso_banco) && $esconde_uso_banco) : ?> colspan="3"<?php endif; ?>>
+        <td<?php if ($esconde_uso_banco) : ?> colspan="3"<?php endif; ?>>
             <div class="titulo">Carteira</div>
             <div class="conteudo"><?php echo $carteira ?></div>
         </td>
@@ -179,12 +179,12 @@
                 <div class="conteudo float_left"><?php echo $nome_sacador ?></div>
                 <div class="conteudo cpf_cnpj"><?php echo $documento_sacador; ?></div>
 
-            <?php endif; ?>
+			<?php endif; ?>
 
         </td>
         <td class="noleftborder">
         	<br><br>
-            <div class="titulo" style="margin-top: 50px">Cód. Baixa</div>
+            <div class="titulo" style="margin-top: 48px; margin-left: 135px;">Cód. Baixa</div>
         </td>
     </tr>
 
@@ -202,6 +202,26 @@
             <?php echo $codigo_barras ?>
         </td>
     </tr>
+
+	<?php if(isset($cod_qrcode) AND (is_string($cod_qrcode) AND trim($cod_qrcode) !== '')) : ?>
+
+        <tr>
+            <td colspan="4" class="noborder">
+                <img style="margin-bottom: 25px;" alt="logotipo" height="50px" src="<?php echo $logo_pix; ?>" />
+            </td>
+            <td colspan="4" class="noborder" style="text-align:right;">
+                <img height="150px" src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=<?php echo $cod_qrcode; ?>&choe=UTF-8" title="Link Pagto PIX" />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="8" class="noborder" style="margin-top: 50px;">
+                Link para pagamento PIX: <br/>
+                <b><?php echo " $cod_qrcode"; ?></b><br/>
+            </td>
+        </tr>
+
+	<?php endif; ?>
 
     </tbody>
 </table>

@@ -34,7 +34,7 @@
 <body>
 
     <div style="width: 666px">
-    	<?php if ($imprime_instrucoes_impressao) :?>
+    	<?php if (!$imprime_instrucoes_impressao) :?>
         <div class="noprint info">
             <h2>Instruções de Impressão</h2>
             <ul>
@@ -55,7 +55,7 @@
         <div class="info-empresa">
             <?php if ($logo_empresa) : ?>
             <div style="display: inline-block;">
-                <img alt="logotipo" width="200" src="<?php echo $logo_empresa; ?>" />
+                <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
             </div>
                 <?php if($reemissao): ?>
                     <br><div style="display: inline-block; vertical-align: super; color: red; text-align: right; font-size: 14px">Boleto atualizado para pagamento nesta data.</div>
@@ -75,6 +75,23 @@
 		<?php if(isset($contentTop) AND (is_string($contentTop) AND trim($contentTop) !== '')) : ?>
 
 			<?= $contentTop ?>
+
+            <div class="info-empresa">
+                <?php if ($logo_empresa) : ?>
+                <div style="display: inline-block;">
+                    <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
+                </div>
+                <?php endif ?>
+                <br>
+                <div style="display: inline-block; vertical-align: super;">
+                    <div><strong><?php echo $cedente; ?></strong></div>
+                    <div><?php echo $cedente_cpf_cnpj; ?></div>
+                    <div><?php echo $cedente_endereco1; ?></div>
+                    <div><?php echo $cedente_endereco2; ?></div>
+                </div>
+            </div>
+            
+            <br>
 
 		<?php endif; ?>
 
@@ -184,9 +201,17 @@
         <br>
         <div class="linha-pontilhada">Corte na linha pontilhada</div>
         <br>
-
+        
         <!-- Ficha de compensação -->
-        <?php include('partials/ficha-de-compensacao.phtml') ?>
+        <!-- ?php include('partials/ficha-de-compensacao.phtml') ? -->
+
+        <?php 
+
+            if($reemissao OR $showPix == false) include('partials/ficha-de-compensacao.phtml');
+            else include('partials/ficha-de-compensacao-pix.phtml');
+
+        ?>
+        
     </div>
 </body>
 </html>

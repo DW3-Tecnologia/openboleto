@@ -181,7 +181,9 @@ class Itau extends BoletoAbstract
         }
 
         // Geração do DAC - Anexo 4 do manual
-        if (!in_array($this->getCarteira(), array('126', '131', '146', '150', '168'))) {
+        // 112 nao esta no anexo 4 do manual, nao consegui entender, mas colocando 112 aqui funciona o DV igual o do banco. (especifico cobra)
+        // https://www.itau.com.br/servicos/boletos/segunda-via/ <- para tirar teima
+        if (!in_array($this->getCarteira(), array('126', '131', '146', '150', '168', '112'))) { 
             // Define o DV da carteira para a view
             $this->carteiraDv = $dvAgContaCarteira = static::modulo10($agencia . $conta . $carteira . $sequencial);
         } else {
