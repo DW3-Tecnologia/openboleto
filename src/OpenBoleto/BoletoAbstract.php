@@ -322,7 +322,7 @@ abstract class BoletoAbstract
     
     protected $logoEmpresa;
     protected $nomeBanco;
-    protected $logoPix;
+    protected $logoPix = 'pix.png';
 
     /**
      * Construtor
