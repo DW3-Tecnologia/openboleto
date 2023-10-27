@@ -206,10 +206,11 @@
         <!-- ?php include('partials/ficha-de-compensacao.phtml') ? -->
 
         <?php 
-
-            if($reemissao OR $showPix == false) include('partials/ficha-de-compensacao.phtml');
-            else include('partials/ficha-de-compensacao-pix.phtml');
-
+            if($showPix == false) {
+                include('partials/ficha-de-compensacao.phtml');
+            } else {
+                include('partials/ficha-de-compensacao-pix.phtml');
+            }
         ?>
         
     </div>
