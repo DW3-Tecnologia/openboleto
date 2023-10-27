@@ -1271,7 +1271,7 @@ abstract class BoletoAbstract
         static $logoData;
 
         $logoData or $logoData = 'data:image/' . pathinfo($this->getLogoEmpresa(), PATHINFO_EXTENSION) .
-            ';base64,' . base64_encode($this->getLogoEmpresa());
+            ';base64,' . base64_encode(file_get_contents($this->getLogoEmpresa()));
 
         return $logoData;
     }
