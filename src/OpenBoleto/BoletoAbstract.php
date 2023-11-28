@@ -759,6 +759,14 @@ abstract class BoletoAbstract
         return $this->sequencial;
     }
 
+    public function getSequencialTrimado() {
+        return ltrim(trim($this->sequencial), 0);
+    }
+
+    public function getTamanhoSequencial() {
+        return strlen($this->getSequencialTrimado());
+    }
+
     /**
      * Define o campo Uso do banco
      *
