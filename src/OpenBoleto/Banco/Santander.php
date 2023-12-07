@@ -133,9 +133,9 @@ class Santander extends BoletoAbstract
         if($this->getTipoConvenio() == 10) {
             $digitoVerificador = static::modulo10($sequencial);
         } else {
-            $digitoVerificador = static::modulo11($sequencial);
+            $digitoVerificador = static::modulo11($sequencial)['digito'];
         }
-        return $digitoVerificador['digito'];
+        return $digitoVerificador;
     }
     
     /**
