@@ -1788,8 +1788,53 @@ abstract class BoletoAbstract
     protected function getFatorVencimento()
     {
         if (!$this->getContraApresentacao()) {
-            $date = new DateTime('1997-10-07');
-            return $date->diff($this->getDataVencimento())->days;
+
+            /*$date = new DateTime('1997-10-07');
+            return $date->diff($this->getDataVencimento())->days;*/
+
+            $nDays = 0;
+
+            /*
+             * As validações abaixo utilizam ranges pré-definidos por conta de regras do Banco Central. Ou seja, se um dia a regra for alterada para que o fator de vencimento
+             * seja calculado a partir de outros ranges específicos, basta alterar o array abaixo.
+             * 
+             * Outras regras mais automatizadas poderiam ser utilizadas, como por exemplo, "resetar" a quantidade de dias quando a diferença superar 9999, etc. A regra abaixo foi 
+             * escolhida por conta das regras definidas pelo Banco Central, utilizando ranges de datas/contadores.
+             * 
+             * > Chamado: https://app.pipefy.com/open-cards/900123538 
+             * 
+             */
+            $aRanges = [
+
+                ['oDatetimeIni' => new DateTime('1997-10-07'), 'oDatetimeEnd' => new DateTime('2025-02-21'), 'nDays' => 0],
+                ['oDatetimeIni' => new DateTime('2025-02-22'), 'oDatetimeEnd' => new DateTime('2049-10-13'), 'nDays' => 1000],
+                ['oDatetimeIni' => new DateTime('2049-10-14'), 'oDatetimeEnd' => new DateTime('2074-06-04'), 'nDays' => 1000],
+                ['oDatetimeIni' => new DateTime('2074-06-05'), 'oDatetimeEnd' => new DateTime('2099-01-24'), 'nDays' => 1000],
+
+                // Demais ranges caso seja necessário...
+
+            ];
+
+            foreach($aRanges as $aRange) {
+
+                if($this->getDataVencimento()->getTimestamp() >= $aRange['oDatetimeIni']->getTimestamp() && $this->getDataVencimento()->getTimestamp() <= $aRange['oDatetimeEnd']->getTimestamp()) {
+
+                    $nDays = $aRange['nDays'];
+
+                    // A partir da definição acima, serão incrementados os dias retornados a partir do cálculo entre a data inicial e a data de vencimento
+                    $nDays += $aRange['oDatetimeIni']->diff($this->getDataVencimento())->days;
+
+                    break;
+
+                }
+
+            }
+
+            // "Debug" da quantidade de dias que deverá ser retornada
+            //var_dump($nDays);exit;
+
+            return $nDays;
+
         } else {
             return '0000';
         }
