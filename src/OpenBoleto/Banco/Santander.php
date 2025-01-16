@@ -108,60 +108,6 @@ class Santander extends BoletoAbstract
         return $this->ios;
     }
 
-    // /**
-    //  * Gera o Nosso Número.
-    //  *
-    //  * @return string
-    //  */
-    // protected function gerarNossoNumero()
-    // {
-    //     if($this->getTamanhoSequencial() > 12) {
-    //         $sequencial = self::zeroFill($this->getSequencialTrimado(), 13);
-    //     } else {
-    //         $sequencial = self::zeroFill($this->getSequencialTrimado(), 12);
-    //     }
-    //     return $sequencial . '-' . $this->gerarDigitoVerificadorNossoNumero();
-    //     // return $sequencial;
-    // }
-
-    // protected function gerarDigitoVerificadorNossoNumero() {
-    //     if($this->getTamanhoSequencial() > 12) {
-    //         $sequencial = self::zeroFill($this->getSequencialTrimado(), 13);
-    //     } else {
-    //         $sequencial = self::zeroFill($this->getSequencialTrimado(), 12);
-    //     }
-    //     if($this->getTipoConvenio() == 10) {
-    //         $digitoVerificador = static::modulo10($sequencial);
-    //     } else {
-    //         $digitoVerificador = static::modulo11($sequencial)['digito'];
-    //     }
-    //     return $digitoVerificador;
-    // }
-    
-    // /**
-    //  * Método para gerar o código da posição de 20 a 44
-    //  *
-    //  * @return string
-    //  * @throws \OpenBoleto\Exception
-    //  */
-    // public function getCampoLivre()
-    // {
-    //     if($this->getTipoConvenio() == 10) {
-    //         return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
-    //             self::zeroFill($this->getSequencialTrimado(), 13) .
-    //             self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
-    //             //self::zeroFill($this->getIos(), 1) .
-    //             self::zeroFill($this->getCarteira(), 3);
-    //     } else {
-    //         return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
-    //             self::zeroFill($this->getSequencialTrimado(), 12) .
-    //             self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
-    //             // self::zeroFill($this->getIos(), 1) .
-    //             self::zeroFill($this->getCarteira(), 3);
-    //     }
-    // }
-
-
     /**
      * Gera o Nosso Número.
      *
@@ -169,13 +115,27 @@ class Santander extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        $sequencial = self::zeroFill($this->getSequencial(), 12);
-        return $sequencial . '-'; // . $this->gerarDigitoVerificadorNossoNumero();
+        if($this->getTamanhoSequencial() > 12) {
+            $sequencial = self::zeroFill($this->getSequencialTrimado(), 13);
+        } else {
+            $sequencial = self::zeroFill($this->getSequencialTrimado(), 12);
+        }
+        // return $sequencial . '-' . $this->gerarDigitoVerificadorNossoNumero();
+        return $sequencial;
     }
 
     protected function gerarDigitoVerificadorNossoNumero() {
-        $sequencial = self::zeroFill($this->getSequencial(), 12);
-        return static::modulo10($sequencial);
+        if($this->getTamanhoSequencial() > 12) {
+            $sequencial = self::zeroFill($this->getSequencialTrimado(), 13);
+        } else {
+            $sequencial = self::zeroFill($this->getSequencialTrimado(), 12);
+        }
+        if($this->getTipoConvenio() == 10) {
+            $digitoVerificador = null; // static::modulo10($sequencial);
+        } else {
+            $digitoVerificador = static::modulo11($sequencial)['digito'];
+        }
+        return $digitoVerificador;
     }
     
     /**
@@ -186,11 +146,19 @@ class Santander extends BoletoAbstract
      */
     public function getCampoLivre()
     {
-        return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
-            self::zeroFill($this->getSequencial(), 13) .
-            self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
-            //self::zeroFill($this->getIos(), 1) .
-            self::zeroFill($this->getCarteira(), 3);
+        if($this->getTipoConvenio() == 10) {
+            return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
+                self::zeroFill($this->getSequencialTrimado(), 13) .
+                self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
+                //self::zeroFill($this->getIos(), 1) .
+                self::zeroFill($this->getCarteira(), 3);
+        } else {
+            return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
+                self::zeroFill($this->getSequencialTrimado(), 12) .
+                self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
+                // self::zeroFill($this->getIos(), 1) .
+                self::zeroFill($this->getCarteira(), 3);
+        }
     }
 
 
