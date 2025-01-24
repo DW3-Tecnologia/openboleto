@@ -134,7 +134,7 @@
             <tr>
                 <td width="107">
                     <div class="titulo">(-) Descontos / Abatimentos</div>
-                    <div class="conteudo rtl"><?php echo $desconto_abatimento ?></div>
+                    <div class="conteudo rtl"><?= $mostrarAbatimentoDesconto ? $desconto_abatimento : '' ?></div>
                 </td>
                 <td width="107">
                     <div class="titulo">(-) Outras deduções</div>
@@ -142,7 +142,7 @@
                 </td>
                 <td>
                     <div class="titulo">(+) Mora / Multa</div>
-                    <div class="conteudo rtl"><?php echo $mora_multa ?></div>
+                    <div class="conteudo rtl"><?= $mostrarJurosMulta ? $mora_multa : '' ?></div>
                 </td>
                 <td width="107">
                     <div class="titulo">(+) Outros acréscimos</div>
@@ -324,7 +324,7 @@
                 </td>
                 <td width="173" class="norightborder">
                     <div class="titulo">(-) Descontos / Abatimentos</div>
-                    <div class="conteudo rtl"><?php echo $desconto_abatimento ?></div>
+                    <div class="conteudo rtl"><?= $mostrarAbatimentoDesconto ? $desconto_abatimento : '' ?></div>
                 </td>
             </tr>
         </tbody>

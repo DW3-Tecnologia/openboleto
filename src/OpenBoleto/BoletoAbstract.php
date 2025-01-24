@@ -323,6 +323,9 @@ abstract class BoletoAbstract
     protected $logoEmpresa;
     protected $nomeBanco;
     protected $logoPix = 'pix.png';
+    
+    protected $mostrarNaMascaraBoletoJurosMulta = true;
+    protected $mostrarNaMascaraBoletoAbatimentoDesconto = true;
 
     /**
      * Construtor
@@ -1490,7 +1493,9 @@ abstract class BoletoAbstract
             'imprime_instrucoes_impressao' => $this->getImprimeInstrucoesImpressao(),
             'reemissao' => $this->getReemissao(),
             'showPix' => $this->getShowPix(),
-            'contentTop' => $this->getContentTop()
+            'contentTop' => $this->getContentTop(),
+            'mostrarJurosMulta' => $this->getMostrarNaMascaraBoletoJurosMulta(),
+            'mostrarAbatimentoDesconto' => $this->getMostrarNaMascaraBoletoAbatimentoDesconto(),
         );
         
         
@@ -1755,6 +1760,22 @@ abstract class BoletoAbstract
         '</div>';
     }
     
+    public function setMostrarNaMascaraBoletoJurosMulta($mostrarNaMascaraBoletoJurosMulta) {
+        $this->mostrarNaMascaraBoletoJurosMulta = $mostrarNaMascaraBoletoJurosMulta;
+    }
+
+    public function getMostrarNaMascaraBoletoJurosMulta() {
+        return $this->mostrarNaMascaraBoletoJurosMulta;
+    }
+    
+    public function setMostrarNaMascaraBoletoAbatimentoDesconto($mostrarNaMascaraBoletoAbatimentoDesconto) {
+        $this->mostrarNaMascaraBoletoAbatimentoDesconto = $mostrarNaMascaraBoletoAbatimentoDesconto;
+    }
+
+    public function getMostrarNaMascaraBoletoAbatimentoDesconto() {
+        return $this->mostrarNaMascaraBoletoAbatimentoDesconto;
+    }
+
     /**
     * Retorna os dados do boleto em um array para ser usado externamente
     *

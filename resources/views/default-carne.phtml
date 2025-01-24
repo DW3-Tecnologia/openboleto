@@ -81,7 +81,7 @@
                 <tr>
                     <td>
                         <div class="titulo">(-) Descontos / Abatimentos</div>
-                        <div class="conteudo"><?php echo $desconto_abatimento ?></div>
+                        <div class="conteudo"><?= $mostrarAbatimentoDesconto ? $desconto_abatimento : '' ?></div>
                     </td>
                 </tr>
                 <tr>
@@ -93,7 +93,7 @@
                 <tr>
                     <td>
                         <div class="titulo">(+) Mora / Multa</div>
-                        <div class="conteudo"><?php echo $mora_multa ?></div>
+                        <div class="conteudo"><?= $mostrarJurosMulta ? $mora_multa : '' ?></div>
                     </td>
                 </tr>
                 <tr>
