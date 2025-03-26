@@ -45,12 +45,15 @@ class Itau extends BoletoAbstract
      * @var string
      */
     protected $codigoBanco = '341';
+    protected $nomeBanco = '';
 
     /**
      * Localização do logotipo do banco, referente ao diretório de imagens
      * @var string
      */
+    protected $logoEmpresa = 'unico.png';
     protected $logoBanco = 'itau.jpg';
+    protected $logoPix      = 'pix.png';
 
     /**
      * Linha de local de pagamento
@@ -80,12 +83,6 @@ class Itau extends BoletoAbstract
      * @var int
      */
     protected $carteiraDv;
-
-    /**
-     * Dígito de auto-conferência do nosso número
-     * @var int
-     */
-    protected $dacNossoNumero;
 
     /**
      * Cache do campo livre para evitar processamento desnecessário.
@@ -123,32 +120,11 @@ class Itau extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        $this->gerarDacNossoNumero(); // Força o calculo do DV.
+        $this->getCampoLivre(); // Força o calculo do DV.
         $numero = self::zeroFill($this->getCarteira(), 3) . '/' . self::zeroFill($this->getSequencial(), 8);
-        $numero .= '-' . $this->dacNossoNumero;
+        $numero .= '-' . $this->carteiraDv;
 
         return $numero;
-    }
-
-    /**
-     * Gera o DAC do Nosso Número
-     * Anexo 4 – Cálculo do DAC do campo “Nosso Número”, em boletos emitidos pelo próprio cliente.
-     * Para a grande maioria das carteiras, são considerados para a obtenção do DAC, os dados “AGÊNCIA / CONTA
-     * (sem DAC) / CARTEIRA / NOSSO NÚMERO”, calculado pelo critério do Módulo 10 (conforme Anexo 3).
-     * À exceção, estão as carteiras 126 - 131 - 146 - 150 e 168 cuja obtenção está baseada apenas nos dados
-     * “CARTEIRA/NOSSO NÚMERO” da operação
-     */
-    protected function gerarDacNossoNumero()
-    {
-        $carteira = self::zeroFill($this->getCarteira(), 3);
-        $sequencial = self::zeroFill($this->getSequencial(), 8);
-        if (in_array($this->getCarteira(), array('126', '131', '146', '150', '168'))) {
-            $this->dacNossoNumero = static::modulo10($carteira . $sequencial);
-        } else {
-            $agencia = self::zeroFill($this->getAgencia(), 4);
-            $conta = self::zeroFill($this->getConta(), 5);
-            $this->dacNossoNumero = static::modulo10($agencia . $conta . $carteira . $sequencial);
-        }
     }
 
     /**
@@ -183,7 +159,7 @@ class Itau extends BoletoAbstract
         // Geração do DAC - Anexo 4 do manual
         // 112 nao esta no anexo 4 do manual, nao consegui entender, mas colocando 112 aqui funciona o DV igual o do banco. (especifico cobra)
         // https://www.itau.com.br/servicos/boletos/segunda-via/ <- para tirar teima
-        if (!in_array($this->getCarteira(), array('126', '131', '146', '150', '168', '112'))) { 
+        if (!in_array($this->getCarteira(), array('126', '131', '146', '150', '168', '112'))) {
             // Define o DV da carteira para a view
             $this->carteiraDv = $dvAgContaCarteira = static::modulo10($agencia . $conta . $carteira . $sequencial);
         } else {
@@ -205,8 +181,7 @@ class Itau extends BoletoAbstract
     public function getViewVars()
     {
         return array(
-            'carteira' => $this->getCarteira(), // Campo não utilizado pelo Itaú,
-            'esconde_uso_banco' => true
+            'carteira' => $this->getCarteira(), // Campo não utilizado pelo Itaú
         );
     }
 }
