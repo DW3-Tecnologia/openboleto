@@ -173,6 +173,10 @@ class Itau extends BoletoAbstract
         return $this->campoLivre = $carteira . $sequencial . $dvAgContaCarteira . $agencia . $conta . $dvAgConta . '000';
     }
 
+    private function getEscondeUso() {
+        return $this->getCarteira() !== '109' ? false : true;
+    }
+
     /**
      * Define nomes de campos específicos do boleto do Itaú
      *
@@ -182,6 +186,7 @@ class Itau extends BoletoAbstract
     {
         return array(
             'carteira' => $this->getCarteira(), // Campo não utilizado pelo Itaú
+            'esconde_uso_banco' => $this->getEscondeUso()
         );
     }
 }
