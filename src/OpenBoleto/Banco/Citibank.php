@@ -68,7 +68,7 @@ class Citibank extends BoletoAbstract {
      * Define as carteiras disponíveis para este banco
      * @var array
      */
-    protected $carteiras = ['101', '102','104', '201'];
+    protected $carteiras = ['101', '102','104', '112', '201'];
 
     /**
      * Define os nomes das carteiras para exibição no boleto
