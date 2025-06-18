@@ -79,6 +79,8 @@ class Santander extends BoletoAbstract
      */
     protected $ios;
 
+    protected $convenio = null;
+
     public function setTipoConvenio($tpConv) {
         $this->tipoConvenio = $tpConv;
     }
@@ -106,6 +108,14 @@ class Santander extends BoletoAbstract
     public function getIos()
     {
         return $this->ios;
+    }
+
+    public function setConvenio($convenio) {
+        $this->convenio = $convenio;
+    }
+    
+    public function getConvenio() {
+        return $this->convenio;
     }
 
     /**
@@ -147,13 +157,13 @@ class Santander extends BoletoAbstract
     public function getCampoLivre()
     {
         if($this->getTipoConvenio() == 10) {
-            return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
+            return '9' . self::zeroFill(substr($this->getConvenio(), 0, 7), 7) .
                 self::zeroFill($this->getSequencialTrimado(), 13) .
                 self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
                 //self::zeroFill($this->getIos(), 1) .
                 self::zeroFill($this->getCarteira(), 3);
         } else {
-            return '9' . self::zeroFill(substr($this->getConta(), 0, 7), 7) .
+            return '9' . self::zeroFill(substr($this->getConvenio(), 0, 7), 7) .
                 self::zeroFill($this->getSequencialTrimado(), 12) .
                 self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
                 // self::zeroFill($this->getIos(), 1) .
