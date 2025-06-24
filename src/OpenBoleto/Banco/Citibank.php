@@ -94,6 +94,18 @@ class Citibank extends BoletoAbstract {
      */
     protected $codigoProduto;
 
+    /**
+     * Define a conta cosmos
+     * @var string
+     */
+    protected $contaCosmos;
+
+    /**
+     * Define o dígito verificador da conta cosmos
+     * @var string
+     */
+    protected $contaCosmosDv;
+
     
 
     /**
@@ -152,6 +164,46 @@ class Citibank extends BoletoAbstract {
         return $this->codigoProduto;
     }
 
+    /**
+     * Define a conta cosmos
+     *
+     * @param string $contaCosmos
+     */
+    public function setContaCosmos(string $contaCosmos) {
+        $this->contaCosmos = $contaCosmos;
+    }
+    
+    /**
+     * Retorna a conta cosmos
+     *
+     * return string
+     */
+    public function getContaCosmos() {
+        return $this->contaCosmos;
+    }
+
+    /**
+     * Define o dígito verificador da conta cosmos
+     *
+     * @param string $contaCosmos
+     */
+    public function setContaCosmosDv(string $contaCosmosDv) {
+        $this->contaCosmosDv = $contaCosmosDv;
+    }
+    
+    /**
+     * Retorna o dígito verificador da conta cosmos
+     *
+     * return string
+     */
+    public function getContaCosmosDv() {
+        return $this->contaCosmosDv;
+    }
+
+    public function getContaCosmosCompleta() {
+        return $this->getContaCosmos() . $this->getContaCosmosDv();
+    }
+
     
 
     /**
@@ -183,7 +235,7 @@ class Citibank extends BoletoAbstract {
     protected function getIndiceContaCosmos() {
         $indice = null;
 
-        $conta = self::zeroFill($this->getConta(), 9);
+        $conta = self::zeroFill($this->getContaCosmosCompleta(), 9);
         if(trim($conta) !== '') {
             $indice = substr($conta, 0, 1);
         }
@@ -197,9 +249,9 @@ class Citibank extends BoletoAbstract {
     protected function getBaseContaCosmos() {
         $base = null;
 
-        $conta = self::zeroFill($this->getConta(), 9);
+        $conta = self::zeroFill($this->getContaCosmosCompleta(), 9);
         if(trim($conta) !== '') {
-            $base = substr($conta, 1, 6);
+            $base = substr($conta, 0, 6);
         }
 
         return $base;
@@ -211,9 +263,9 @@ class Citibank extends BoletoAbstract {
     protected function getSequenciaContaCosmos() {
         $sequencia = null;
 
-        $conta = self::zeroFill($this->getConta(), 9);
+        $conta = self::zeroFill($this->getContaCosmosCompleta(), 9);
         if(trim($conta) !== '') {
-            $sequencia = substr($conta, 7, 2);
+            $sequencia = substr($conta, 6, 2);
         }
 
         return $sequencia;
@@ -223,7 +275,7 @@ class Citibank extends BoletoAbstract {
      * Retorna o dígito verificador da conta cosmos
      */
     protected function getDigitoVerificadorContaCosmos() {
-        return $this->getContaDv();
+        return $this->getContaCosmosDv();
     }
 
     /**
@@ -255,6 +307,25 @@ class Citibank extends BoletoAbstract {
         $codigo .= $this->getSequenciaContaCosmos();
         $codigo .= $this->getDigitoVerificadorContaCosmos();
         $codigo .= self::zeroFill($this->getSequencial(), 12);
+
+        // "Debug"
+        /*echo 'Parâmetros completos: <br>';
+        echo '- Identificação da Empresa completa: ' . $this->getConvenio() . '<br>';
+        echo '- Conta Cosmos completa: ' . $this->getContaCosmosCompleta() . '<br>';
+        echo '- Nosso número completo: ' . $this->getSequencial() . '<br>';
+         
+        echo '<br>';
+        echo 'Parâmetros conforme a tabela da linha digitável: <br>';
+        echo '- Código do produto: ' . $this->getCodigoProduto() . '<br>';
+        echo '- Portfólio: ' . substr($this->getIdentificacaoEmpresa(), -3) . '<br>';
+        echo '- Conta Cosmos ( base ): ' . $this->getBaseContaCosmos() . '<br>';
+        echo '- Conta Cosmos ( sequência ): ' . $this->getSequenciaContaCosmos() . '<br>';
+        echo '- Conta Cosmos ( dígito verificador ): ' . $this->getDigitoVerificadorContaCosmos() . '<br>';
+        echo '- Nosso número: ' . self::zeroFill($this->getSequencial(), 12) . '<br>';
+        
+        echo '<br>';
+        echo 'Campo livre gerado: ' . $codigo;
+        exit;*/
 
         return $codigo;
     }
@@ -306,8 +377,49 @@ class Citibank extends BoletoAbstract {
         // "Debug"
         //var_dump($return);exit;
 
+        // "Debug"
+        /*echo 'Parâmetros completos: <br>';
+        echo '- Identificação da Empresa completa: ' . $this->getConvenio() . '<br>';
+        echo '- Conta Cosmos completa: ' . $this->getContaCosmosCompleta() . '<br>';
+        echo '- Nosso número completo: ' . $nossoNumero . '<br>';
+
+        echo '<br>';
+        echo 'Parâmetros conforme a tabela da linha digitável: <br>';
+        echo '- Identificação do Banco: ' . $this->getCodigoBanco() . '<br>';
+        echo '- Moeda: ' . $this->getMoeda() . '<br>';
+        echo '- Código do produto: ' . $codigoProduto . '<br>';
+        echo '- Portfólio: ' . $portfolio . '<br>';
+        echo '- Conta Cosmos ( parte 1 ): ' . $contaCosmos1 . '<br>';
+        echo '- Dígito verificador da linha digitável ( parte 1 ): ' . $part1Dv . '<br>';
+        echo '- Conta Cosmos ( parte 2 ): ' . $contaCosmos2 . '<br>';
+        echo '- Conta Cosmos ( parte 3 ): ' . $this->getSequenciaContaCosmos() . '<br>';
+        echo '- Conta Cosmos ( parte 4 ): ' . $this->getDigitoVerificadorContaCosmos() . '<br>';
+        echo '- Nosso número ( parte 1 ): ' . $nossoNumero1 . '<br>';
+        echo '- Dígito verificador da linha digitável ( parte 2 ): ' . $part2Dv . '<br>';
+        echo '- Nosso número ( parte 2 ): ' . $nossoNumero2 . '<br>';
+        echo '- Dígito verificador da linha digitável ( parte 3 ): ' . $part3Dv . '<br>';
+        echo '- Dígito verificador do código de barras: ' . $this->getDigitoVerificador() . '<br>';
+        echo '- Fator de vencimento: ' . $this->getFatorVencimento() . '<br>';
+        echo '- Valor do título: ' . $this->getValorZeroFill() . '<br>';
+        exit;*/
+        
         return $return;
     }
+
+    // > Regras: Caso seja necessário gerar um dígito verificador específico, basta descomentar o método abaixo e personalizar o conteúdo.
+    /*protected function getDigitoVerificador() {
+
+        $num = self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getFatorVencimento() . $this->getValorZeroFill() . $this->getCampoLivre();
+
+        $modulo = static::modulo11($num);
+        if ($modulo['resto'] == 0 || $modulo['resto'] == 1)
+            $dv = 1;
+        else 
+            $dv = 11 - $modulo['resto'];
+        
+        return $dv;
+
+    }*/
 
     /**
      * Define variáveis da view específicas do boleto do Santander
