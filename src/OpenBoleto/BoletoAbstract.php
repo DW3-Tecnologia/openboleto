@@ -326,8 +326,6 @@ abstract class BoletoAbstract
     
     protected $mostrarNaMascaraBoletoJurosMulta = true;
     protected $mostrarNaMascaraBoletoAbatimentoDesconto = true;
-
-    public abstract function getConvenio();
     /**
      * Construtor
      *
