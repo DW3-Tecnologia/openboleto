@@ -1479,7 +1479,7 @@ abstract class BoletoAbstract
             'instrucoes' => (array) $this->getInstrucoes() + array(null, null, null, null, null, null, null, null), // Max: 8 linhas
             'local_pagamento' => $this->getLocalPagamento(),
             'numero_documento' => $this->getNumeroDocumento(),
-            'agencia_codigo_cedente'=> $this->getAgenciaCodigoCedente(),
+            'agencia_codigo_cedente'=> $this->getAgenciaCodigoCedente(false),
             'nosso_numero' => $this->getNossoNumero(),
             'especie_doc' => $this->getEspecieDoc(),
             'cod_qrcode' => $this->getCodQrCode(),
@@ -1515,13 +1515,22 @@ abstract class BoletoAbstract
     /**
      * Retorna o campo Agência/Cedente do boleto
      *
+     * @param $exibeAgenciaConta
      * @return string
      */
-    public function getAgenciaCodigoCedente()
+    public function getAgenciaCodigoCedente(bool $exibeAgenciaConta = true)
     {
         $agencia = $this->getAgenciaDv() !== null ? $this->getAgencia() . '-' . $this->getAgenciaDv() : $this->getAgencia();
-        $conta = $this->getContaDv() !== null ? $this->getConta() . '-' . $this->getContaDv() : $this->getConta();
-        return $agencia . ' / ' . $conta;
+
+        // Formatação para exibição da agência e conta
+        if ($exibeAgenciaConta === true)
+            $complemento = $this->getContaDv() !== null ? $this->getConta() . '-' . $this->getContaDv() : $this->getConta();
+
+        // Formatação para exibição da agência e código do convênio
+        else 
+            $complemento = (method_exists($this, 'getConvenio')) ? $this->getConvenio() : '-';
+
+        return $agencia . ' / ' . $complemento;
     }
 
     /**
