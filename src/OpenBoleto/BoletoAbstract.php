@@ -326,6 +326,28 @@ abstract class BoletoAbstract
     
     protected $mostrarNaMascaraBoletoJurosMulta = true;
     protected $mostrarNaMascaraBoletoAbatimentoDesconto = true;
+
+    /**
+     * Status referente à exibição dos dados da empresa no cabeçalho da máscara
+     * @var bool
+     */
+    protected $mostrarNaMascaraDadosEmpresaNoCabecalho = true;
+
+    /**
+     * Status referente à exibição do bloco "Informativo" na máscara
+     * @var bool
+     */
+    protected $mostrarNaMascaraInformativo = true;
+
+    /**
+     * Status referente à exibição do segundo logo da empresa na máscara
+     * 
+     * > Regras: Normalmente esse segundo logo é exibido na segunda página quando um conteúdo específico é exibido no topo da máscara, fazendo com que ocorra a quebra de página.
+     * 
+     * @var bool
+     */
+    protected $mostrarNaMascaraSegundoLogoEmpresa = true;
+
     /**
      * Construtor
      *
@@ -1495,6 +1517,9 @@ abstract class BoletoAbstract
             'contentTop' => $this->getContentTop(),
             'mostrarJurosMulta' => $this->getMostrarNaMascaraBoletoJurosMulta(),
             'mostrarAbatimentoDesconto' => $this->getMostrarNaMascaraBoletoAbatimentoDesconto(),
+            'mostrarNaMascaraDadosEmpresaNoCabecalho' => $this->getMostrarNaMascaraDadosEmpresaNoCabecalho(),
+            'mostrarNaMascaraInformativo' => $this->getMostrarNaMascaraInformativo(),
+            'mostrarNaMascaraSegundoLogoEmpresa' => $this->getMostrarNaMascaraSegundoLogoEmpresa(),
         );
         
         
@@ -1782,6 +1807,30 @@ abstract class BoletoAbstract
 
     public function getMostrarNaMascaraBoletoAbatimentoDesconto() {
         return $this->mostrarNaMascaraBoletoAbatimentoDesconto;
+    }
+
+    public function setMostrarNaMascaraDadosEmpresaNoCabecalho($mostrarNaMascaraDadosEmpresaNoCabecalho) {
+        $this->mostrarNaMascaraDadosEmpresaNoCabecalho = $mostrarNaMascaraDadosEmpresaNoCabecalho;
+    }
+
+    public function getMostrarNaMascaraDadosEmpresaNoCabecalho() {
+        return $this->mostrarNaMascaraDadosEmpresaNoCabecalho;
+    }
+
+    public function setMostrarNaMascaraInformativo($mostrarNaMascaraInformativo) {
+        $this->mostrarNaMascaraInformativo = $mostrarNaMascaraInformativo;
+    }
+    
+    public function getMostrarNaMascaraInformativo() {
+        return $this->mostrarNaMascaraInformativo;
+    }
+
+    public function setMostrarNaMascaraSegundoLogoEmpresa($mostrarNaMascaraSegundoLogoEmpresa) {
+        $this->mostrarNaMascaraSegundoLogoEmpresa = $mostrarNaMascaraSegundoLogoEmpresa;
+    }
+    
+    public function getMostrarNaMascaraSegundoLogoEmpresa() {
+        return $this->mostrarNaMascaraSegundoLogoEmpresa;
     }
 
     /**
