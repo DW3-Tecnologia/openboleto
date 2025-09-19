@@ -349,6 +349,22 @@ abstract class BoletoAbstract
     protected $mostrarNaMascaraSegundoLogoEmpresa = true;
 
     /**
+     * Status referente à exibição do código de barras junto com o qrcode em um formato compactado, de modo que o qrcode seja exibido com um tamanho diminuído ao lado
+     * 
+     * @var bool
+     * 
+     */
+    protected $mostrarNaMascaraCodBarrasComQrCodeCompactado = false;
+
+    /**
+     * Status referente à exibição do código de barras em um bloco e o qrcode em um bloco abaixo, de modo que o qrcode seja exibido com um tamanho padrão
+     * 
+     * @var bool
+     * 
+     */
+    protected $mostrarNaMascaraCodBarrasComQrCodeSeparado = true;
+
+    /**
      * Construtor
      *
      * @param array $params Parâmetros iniciais para construção do objeto
@@ -1520,6 +1536,8 @@ abstract class BoletoAbstract
             'mostrarNaMascaraDadosEmpresaNoCabecalho' => $this->getMostrarNaMascaraDadosEmpresaNoCabecalho(),
             'mostrarNaMascaraInformativo' => $this->getMostrarNaMascaraInformativo(),
             'mostrarNaMascaraSegundoLogoEmpresa' => $this->getMostrarNaMascaraSegundoLogoEmpresa(),
+            'mostrarNaMascaraCodBarrasComQrCodeCompactado' => $this->getMostrarNaMascaraCodBarrasComQrCodeCompactado(),
+            'mostrarNaMascaraCodBarrasComQrCodeSeparado' => $this->getMostrarNaMascaraCodBarrasComQrCodeSeparado()
         );
         
         
@@ -1831,6 +1849,22 @@ abstract class BoletoAbstract
     
     public function getMostrarNaMascaraSegundoLogoEmpresa() {
         return $this->mostrarNaMascaraSegundoLogoEmpresa;
+    }
+    
+    public function setMostrarNaMascaraCodBarrasComQrCodeCompactado($mostrarNaMascaraCodBarrasComQrCodeCompactado) {
+        $this->mostrarNaMascaraCodBarrasComQrCodeCompactado = $mostrarNaMascaraCodBarrasComQrCodeCompactado;
+    }
+    
+    public function getMostrarNaMascaraCodBarrasComQrCodeCompactado() {
+        return $this->mostrarNaMascaraCodBarrasComQrCodeCompactado;
+    }
+
+    public function setMostrarNaMascaraCodBarrasComQrCodeSeparado($mostrarNaMascaraCodBarrasComQrCodeSeparado) {
+        $this->mostrarNaMascaraCodBarrasComQrCodeSeparado = $mostrarNaMascaraCodBarrasComQrCodeSeparado;
+    }
+    
+    public function getMostrarNaMascaraCodBarrasComQrCodeSeparado() {
+        return $this->mostrarNaMascaraCodBarrasComQrCodeSeparado;
     }
 
     /**
