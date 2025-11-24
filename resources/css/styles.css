@@ -108,8 +108,7 @@ body{
 }
 
 .table-boleto .logobanco img {
-    margin-bottom: -5px;
-    height: 27px;
+    height: 20px;
 }
 
 .table-boleto .codbanco {
@@ -119,7 +118,7 @@ body{
     border-left: 2px solid #000;
     border-right: 2px solid #000;
     width: 51px;
-    margin-left: 25px;
+    margin-left: 5px;
 }
 
 .table-boleto .linha-digitavel {
