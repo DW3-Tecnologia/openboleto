@@ -54,20 +54,24 @@
 
         <div class="info-empresa">
             <?php if ($logo_empresa) : ?>
-            <div style="display: inline-block;">
-                <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
-            </div>
-                <?php if($reemissao): ?>
-                    <br><div style="display: inline-block; vertical-align: super; color: red; text-align: right; font-size: 14px">Boleto atualizado para pagamento nesta data.</div>
+                <div style="display: inline-block;">
+                    <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
+                </div>
+            	<?php if ($mostrarNaMascaraDadosEmpresaNoCabecalho === true) : ?>
+                    <?php if($reemissao): ?>
+                        <br><div style="display: inline-block; vertical-align: super; color: red; text-align: right; font-size: 14px">Boleto atualizado para pagamento nesta data.</div>
+                    <?php endif; ?>
                 <?php endif; ?>
             <?php endif ?>
-			<br>
-            <div style="display: inline-block; vertical-align: super;">
-                <div><strong><?php echo $cedente; ?></strong></div>
-                <div><?php echo $cedente_cpf_cnpj; ?></div>
-                <div><?php echo $cedente_endereco1; ?></div>
-                <div><?php echo $cedente_endereco2; ?></div>
-            </div>
+            <?php if ($mostrarNaMascaraDadosEmpresaNoCabecalho === true) : ?>
+    			<br>
+                <div style="display: inline-block; vertical-align: super;">
+                    <div><strong><?php echo $cedente; ?></strong></div>
+                    <div><?php echo $cedente_cpf_cnpj; ?></div>
+                    <div><?php echo $cedente_endereco1; ?></div>
+                    <div><?php echo $cedente_endereco2; ?></div>
+                </div>
+            <?php endif ?>
         </div>
 
 		<br>
@@ -77,130 +81,136 @@
 			<?= $contentTop ?>
 
             <div class="info-empresa">
-                <?php if ($logo_empresa) : ?>
-                <div style="display: inline-block;">
-                    <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
-                </div>
-                <?php endif ?>
-                <br>
-                <div style="display: inline-block; vertical-align: super;">
-                    <div><strong><?php echo $cedente; ?></strong></div>
-                    <div><?php echo $cedente_cpf_cnpj; ?></div>
-                    <div><?php echo $cedente_endereco1; ?></div>
-                    <div><?php echo $cedente_endereco2; ?></div>
-                </div>
+            	<?php if ($mostrarNaMascaraSegundoLogoEmpresa === true) : ?>
+                    <?php if ($logo_empresa) : ?>
+                        <div style="display: inline-block;">
+                            <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
+                        </div>
+                    <?php endif ?>
+                <?php endif; ?>
+                <?php if ($mostrarNaMascaraDadosEmpresaNoCabecalho === true) : ?>
+                    <br>
+                    <div style="display: inline-block; vertical-align: super;">
+                        <div><strong><?php echo $cedente; ?></strong></div>
+                        <div><?php echo $cedente_cpf_cnpj; ?></div>
+                        <div><?php echo $cedente_endereco1; ?></div>
+                        <div><?php echo $cedente_endereco2; ?></div>
+                    </div>
+                <?php endif; ?>
             </div>
             
             <br>
 
 		<?php endif; ?>
 
-        <table class="table-boleto" cellpadding="0" cellspacing="0" border="0">
-            <tbody>
-            <tr>
-                <td valign="bottom" colspan="8" class="noborder nopadding">
-                    <div class="logocontainer">
-                        <div class="logobanco">
-                            <img src="<?php echo $logo_banco; ?>" alt="logotipo do banco">
+		<?php if ($mostrarNaMascaraInformativo === true) : ?>
+            <table class="table-boleto" cellpadding="0" cellspacing="0" border="0">
+                <tbody>
+                <tr>
+                    <td valign="bottom" colspan="8" class="noborder nopadding">
+                        <div class="logocontainer">
+                            <div class="logobanco">
+                                <img src="<?php echo $logo_banco; ?>" alt="logotipo do banco">
+                            </div>
+                            <div class="codbanco"><?php echo $codigo_banco_com_dv ?></div>
                         </div>
-                        <div class="codbanco"><?php echo $codigo_banco_com_dv ?></div>
-                    </div>
-                    <div class="linha-digitavel"><?php echo $linha_digitavel ?></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" width="250">
-                    <div class="titulo">Beneficiário</div>
-                    <div class="conteudo"><?php echo $cedente ?></div>
-                </td>
-                <td>
-                    <div class="titulo">CPF/CNPJ</div>
-                    <div class="conteudo"><?php echo $cedente_cpf_cnpj ?></div>
-                </td>
-                <td width="120">
-                    <div class="titulo">Agência/Código do Beneficiário</div>
-                    <div class="conteudo rtl"><?php echo $agencia_codigo_cedente ?></div>
-                </td>
-                <td width="110">
-                    <div class="titulo">Vencimento</div>
-                    <div class="conteudo rtl"><?php echo $vencimento_exibido ?></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div class="titulo">Pagador</div>
-                    <div class="conteudo"><?php echo $sacado ?></div>
-                </td>
-                <td>
-                    <div class="titulo">Nº documento</div>
-                    <div class="conteudo rtl"><?php echo $numero_documento ?></div>
-                </td>
-                <td>
-                    <div class="titulo">Nosso número</div>
-                    <div class="conteudo rtl"><?php echo $nosso_numero ?></div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="titulo">Espécie</div>
-                    <div class="conteudo"><?php echo $especie ?></div>
-                </td>
-                <td>
-                    <div class="titulo">Quantidade</div>
-                    <div class="conteudo rtl"><?php echo $quantidade ?></div>
-                </td>
-                <td>
-                    <div class="titulo">Valor</div>
-                    <div class="conteudo rtl"><?php echo $valor_unitario ?></div>
-                </td>
-                <td>
-                    <div class="titulo">(-) Descontos / Abatimentos</div>
-                    <div class="conteudo rtl"><?= $mostrarAbatimentoDesconto ? $desconto_abatimento : '' ?></div>
-                </td>
-                <td>
-                    <div class="titulo">(=) Valor Documento</div>
-                    <div class="conteudo rtl"><?php echo $valor_documento ?></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="conteudo"></div>
-                    <div class="titulo">Demonstrativo</div>
-                </td>
-                <td>
-                    <div class="titulo">(-) Outras deduções</div>
-                    <div class="conteudo"><?php echo $outras_deducoes ?></div>
-                </td>
-                <td>
-                    <div class="titulo">(+) Outros acréscimos</div>
-                    <div class="conteudo rtl"><?php echo $outros_acrescimos ?></div>
-                </td>
-                <td>
-                    <div class="titulo">(=) Valor cobrado</div>
-                    <div class="conteudo rtl"><?php echo $valor_cobrado ?></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4"><div style="margin-top: 10px" class="conteudo"><?php echo $demonstrativo[0] ?></div></td>
-                <td class="noleftborder"><div class="titulo">Autenticação mecânica</div></td>
-            </tr>
-            <tr>
-                <td colspan="5" class="notopborder"><div class="conteudo"><?php echo $demonstrativo[1] ?></div></td>
-            </tr>
-            <tr>
-                <td colspan="5" class="notopborder"><div class="conteudo"><?php echo $demonstrativo[2] ?></div></td>
-            </tr>
-            <tr>
-                <td colspan="5" class="notopborder"><div class="conteudo"><?php echo $demonstrativo[3] ?></div></td>
-            </tr>
-            <tr>
-                <td colspan="5" class="notopborder bottomborder"><div style="margin-bottom: 10px;" class="conteudo"><?php echo $demonstrativo[4] ?></div></td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <div class="linha-pontilhada">Corte na linha pontilhada</div>
-        <br>
+                        <div class="linha-digitavel"><?php echo $linha_digitavel ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" width="250">
+                        <div class="titulo">Beneficiário</div>
+                        <div class="conteudo"><?php echo $cedente ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">CPF/CNPJ</div>
+                        <div class="conteudo"><?php echo $cedente_cpf_cnpj ?></div>
+                    </td>
+                    <td width="120">
+                        <div class="titulo">Agência/Código do Beneficiário</div>
+                        <div class="conteudo rtl"><?php echo $agencia_codigo_cedente ?></div>
+                    </td>
+                    <td width="110">
+                        <div class="titulo">Vencimento</div>
+                        <div class="conteudo rtl"><?php echo $vencimento_exibido ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="titulo">Pagador</div>
+                        <div class="conteudo"><?php echo $sacado ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">Nº documento</div>
+                        <div class="conteudo rtl"><?php echo $numero_documento ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">Nosso número</div>
+                        <div class="conteudo rtl"><?php echo $nosso_numero ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="titulo">Espécie</div>
+                        <div class="conteudo"><?php echo $especie ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">Quantidade</div>
+                        <div class="conteudo rtl"><?php echo $quantidade ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">Valor</div>
+                        <div class="conteudo rtl"><?php echo $valor_unitario ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">(-) Descontos / Abatimentos</div>
+                        <div class="conteudo rtl"><?= $mostrarAbatimentoDesconto ? $desconto_abatimento : '' ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">(=) Valor Documento</div>
+                        <div class="conteudo rtl"><?php echo $valor_documento ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="conteudo"></div>
+                        <div class="titulo">Demonstrativo</div>
+                    </td>
+                    <td>
+                        <div class="titulo">(-) Outras deduções</div>
+                        <div class="conteudo"><?php echo $outras_deducoes ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">(+) Outros acréscimos</div>
+                        <div class="conteudo rtl"><?php echo $outros_acrescimos ?></div>
+                    </td>
+                    <td>
+                        <div class="titulo">(=) Valor cobrado</div>
+                        <div class="conteudo rtl"><?php echo $valor_cobrado ?></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><div style="margin-top: 10px" class="conteudo"><?php echo $demonstrativo[0] ?></div></td>
+                    <td class="noleftborder"><div class="titulo">Autenticação mecânica</div></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="notopborder"><div class="conteudo"><?php echo $demonstrativo[1] ?></div></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="notopborder"><div class="conteudo"><?php echo $demonstrativo[2] ?></div></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="notopborder"><div class="conteudo"><?php echo $demonstrativo[3] ?></div></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="notopborder bottomborder"><div style="margin-bottom: 10px;" class="conteudo"><?php echo $demonstrativo[4] ?></div></td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+            <div class="linha-pontilhada">Corte na linha pontilhada</div>
+            <br>
+        <?php endif; ?>
         
         <!-- Ficha de compensação -->
         <?php include('partials/ficha-de-compensacao-citibank.phtml') ?>
