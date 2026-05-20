@@ -183,4 +183,16 @@ class BancoDoBrasil extends BoletoAbstract
 
         throw new Exception('O código do convênio precisa ter 4, 6 ou 7 dígitos!');
     }
+
+    /**
+     * Define variáveis da view específicas do boleto do Santander
+     *
+     * @return array
+     */
+    public function getViewVars()
+    {
+        return array(
+            'esconde_uso_banco' => true
+        );
+    }
 }
