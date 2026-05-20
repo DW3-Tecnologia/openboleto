@@ -51,6 +51,33 @@
             <div class="linha-pontilhada" style="margin-bottom: 20px;">Recibo do pagador</div>
         </div>
         <?php endif ?>
+        
+        <div class="info-empresa">
+            <?php if ($logo_empresa) : ?>
+            <div style="display: inline-block;">
+                <img alt="logotipo" width="200" src="<?php echo $logo_empresa; ?>" />
+            </div>
+                <?php if($reemissao): ?>
+                    <br><div style="display: inline-block; vertical-align: super; color: red; text-align: right; font-size: 14px">Boleto atualizado para pagamento nesta data.</div>
+                <?php endif; ?>
+            <?php endif ?>
+			<br>
+            <div style="display: inline-block; vertical-align: super;">
+                <div><strong><?php echo $cedente; ?></strong></div>
+                <div><?php echo $cedente_cpf_cnpj; ?></div>
+                <div><?php echo $cedente_endereco1; ?></div>
+                <div><?php echo $cedente_endereco2; ?></div>
+            </div>
+        </div>
+
+		<br>
+
+		<?php if(isset($contentTop) AND (is_string($contentTop) AND trim($contentTop) !== '')) : ?>
+
+			<?= $contentTop ?>
+
+		<?php endif; ?>
+
 
         <table class="table-boleto" cellpadding="0" cellspacing="0" border="0">
             <tbody>
