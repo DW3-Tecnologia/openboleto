@@ -54,17 +54,16 @@
 
         <div class="info-empresa">
             <?php if ($logo_empresa) : ?>
-                <div style="display: inline-block;">
-                    <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
+            	<div style="width: 200px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 0px;">
+	                <img alt="logotipo" style="max-width: 200px; max-height: 50px;" src="<?php echo $logo_empresa; ?>" />
                 </div>
             	<?php if ($mostrarNaMascaraDadosEmpresaNoCabecalho === true) : ?>
                     <?php if($reemissao): ?>
-                        <br><div style="display: inline-block; vertical-align: super; color: red; text-align: right; font-size: 14px">Boleto atualizado para pagamento nesta data.</div>
+                        <div style="display: inline-block; vertical-align: super; color: red; text-align: right; font-size: 14px">Boleto atualizado para pagamento nesta data.</div><br>
                     <?php endif; ?>
                 <?php endif; ?>
             <?php endif ?>
             <?php if ($mostrarNaMascaraDadosEmpresaNoCabecalho === true) : ?>
-    			<br>
                 <div style="display: inline-block; vertical-align: super;">
                     <div><strong><?php echo $cedente; ?></strong></div>
                     <div><?php echo $cedente_cpf_cnpj; ?></div>
@@ -83,9 +82,9 @@
             <div class="info-empresa">
             	<?php if ($mostrarNaMascaraSegundoLogoEmpresa === true) : ?>
                     <?php if ($logo_empresa) : ?>
-                        <div style="display: inline-block;">
-                            <img alt="logotipo" width="100" src="<?php echo $logo_empresa; ?>" />
-                        </div>
+                        <div style="width: 200px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 0px;">
+	                		<img alt="logotipo" style="max-width: 200px; max-height: 50px;" src="<?php echo $logo_empresa; ?>" />
+                		</div>
                     <?php endif ?>
                 <?php endif; ?>
                 <?php if ($mostrarNaMascaraDadosEmpresaNoCabecalho === true) : ?>
